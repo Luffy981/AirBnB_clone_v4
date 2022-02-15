@@ -1,6 +1,9 @@
 $(function () {
   const AmenitiesChecked = {};
-  $(document).on('change', "input[type='checkbox']", function () {
+  const StatesChecked = {};
+  const LocationsChecked = {};
+  const CitiesChecked = {};
+  $(document).on('change', ".amenities > .popover > ul > li > input[type='checkbox']", function () {
     if (this.checked) {
       AmenitiesChecked[$(this).data('id')] = $(this).data('name');
     } else {
@@ -9,9 +12,41 @@ $(function () {
     const Objs = Object.values(AmenitiesChecked);
     console.log(Object.values(AmenitiesChecked));
     if (Objs) {
-      $('.amenities > h4').text(Object.values(AmenitiesChecked).join(', '));
+      $('.amenities > h4').text(Objs.join(', '));
     } else {
       $('.amenities > h4').html('&nbsp;');
+    }
+  });
+  $(document).on('change', ".locations > .popover > ul > li > input[type='checkbox']", function () {
+    if (this.checked) {
+      StatesChecked[$(this).data('id')] = $(this).data('name');
+      LocationsChecked[$(this).data('id')] = $(this).data('name');
+    } else {
+      delete StatesChecked[$(this).data('id')];
+      delete LocationsChecked[$(this).data('id')];
+    }
+    const Objs = Object.values(LocationsChecked);
+    console.log(Object.values(LocationsChecked));
+    if (Objs) {
+      $('div.locations > h4').text(Objs.join(', '));
+    } else {
+      $('div.locations > h4').html('&nbsp;');
+    }
+  });
+  $(document).on('change', ".locations > .popover > ul > li > ul > li > input[type='checkbox']", function () {
+    if (this.checked) {
+      CitiesChecked[$(this).data('id')] = $(this).data('name');
+      LocationsChecked[$(this).data('id')] = $(this).data('name');
+    } else {
+      delete CitiesChecked[$(this).data('id')];
+      delete LocationsChecked[$(this).data('id')];
+    }
+    const Objs = Object.values(LocationsChecked);
+    console.log(Object.values(LocationsChecked));
+    if (Objs) {
+      $('div.locations > h4').text(Objs.join(', '));
+    } else {
+      $('div.locations > h4').html('&nbsp;');
     }
   });
   $.getJSON('http://0.0.0.0:5001/api/v1/status/', (data) => {
@@ -31,7 +66,7 @@ $(function () {
   $.ajax({
     url: `http://${window.location.hostname}:5001/api/v1/places_search`,
     type: 'POST',
-    data: JSON.stringify(AmenitiesChecked),
+    data: '{}',
     contentType: 'application/json',
     success: data => {
       for (const place of data) {
@@ -77,7 +112,7 @@ $(function () {
     $.ajax({
       url: `http://${window.location.hostname}:5001/api/v1/places_search`,
       type: 'POST',
-      data: JSON.stringify({ amenities: Object.keys(AmenitiesChecked) }),
+      data: JSON.stringify({ amenities: Object.keys(AmenitiesChecked), 'states': Object.keys(StatesChecked), 'cities': Object.keys(CitiesChecked) }),
       contentType: 'application/json',
       success: data => {
         for (const place of data) {

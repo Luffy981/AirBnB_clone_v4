@@ -88,6 +88,24 @@ button:hover {
 .locations .popover {
     margin-top: 0%;
 }
+
+.locations > .popover > ul > li {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.locations .popover > ul> li > ul {
+    /* padding-left: 20px; */
+    flex: 0 1 100%;
+    /* margin-top: 5px; */
+}
+
+.filters li > input {
+    margin-right: 10px;
+}
+
 .popover ul {
     list-style-type: none;
     padding-bottom: 10px;
